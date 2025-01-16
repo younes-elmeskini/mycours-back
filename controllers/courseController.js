@@ -1,18 +1,17 @@
 const prisma = require("../utils/client");
 
 const addCourse = async (req, res) => {
-  const { name, duration, lesson } = req.body;
+  const { name, duration, chapiter} = req.body;
   try {
     await prisma.course.create({
       data: {
         name,
         duration,
-        lessons: {
-          create: Array.isArray(lesson) ? lesson : [lesson],
+        chapiters: {
+          create: Array.isArray(chapiter) ? chapiter : [chapiter],
         },
       },
     });
-
     res.status(200).send({ message: "success" });
   } catch (error) {
     res.status(500).send({ message: "Opps!!", error });
