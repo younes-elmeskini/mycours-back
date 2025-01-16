@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+
+model user {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  password  String
+  role  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   DateTime?
+  courseUser courseUser[]
+  likes likes[]
+  commentaire commentaire[]
+  watchlist watchlist[]
+  usersubcat usersubcat[]
+  levels levels[]
+  payemnt payemnt[]
+  course course[]
+}
+
+model course {
+  id        Int    @id @default(autoincrement())
+  title      String
+  description String
+  image     String
+  price     Float
+  oldprice  Float
+  userId Int
+  user   user @relation(fields: [userId], references: [id])
+  subcategoryid Int
+  subcategory subcategories @relation(fields: [subcategoryid], references: [id])
+  tagid Int
+  tag tags @relation(fields: [tagid], references: [id])
+  reviews reviews[]
+  likes likes[]
+  courseUser courseUser[]
+  commentaire commentaire[]
+  chapiters chapitres[]
+}
+
+model chapitres{
+  id        Int    @id @default(autoincrement())
+  title      String
+  courseid Int
+  course   course @relation(fields: [courseid], references: [id])
+  watchlist watchlist[]
+  videos videos[]
+}
+
+model videos {
+  id        Int    @id @default(autoincrement())
+  title      String
+  url   String
+  completes  Boolean
+  chapitresid Int
+  chapitres   chapitres @relation(fields: [chapitresid], references:[id])
+}
+
+model Categories {
+  id        Int    @id @default(autoincrement())
+  name      String
+  description String
+  image     String
+  subcategory subcategories[]
+}
+
+model subcategories {
+  id        Int    @id @default(autoincrement())
+  name      String
+  description String
+  image     String
+  categoryid  Int
+  category  Categories @relation(fields: [categoryid], references: [id])
+  course  course[]
+  usersubcat usersubcat[]
+}
+
+model tags{
+  id        Int    @id @default(autoincrement())
+  name      String
+  description String
+  image     String
+  course  course[]
+}
+
+model reviews {
+  id        Int    @id @default(autoincrement())
+  rating    Int
+  comment   String
+  courseid  Int
+  course    course @relation(fields: [courseid], references: [id])
+}
+
+model likes {
+  courseid  Int
+  course    course @relation(fields: [courseid], references: [id])
+  userid    Int
+  user      user @relation(fields: [userid], references: [id])
+  @@unique([courseid, userid])
+}
+
+model commentaire {
+  id        Int    @id @default(autoincrement())
+  comment   String
+  courseid  Int
+  course    course @relation(fields: [courseid], references: [id])
+  userid    Int
+  user      user @relation(fields: [userid], references: [id])
+}
+
+model courseUser {
+  courseId  Int
+  userId    Int
+  course    course @relation(fields: [courseId], references: [id])
+  user      user @relation(fields: [userId], references: [id])
+  @@id([courseId, userId])
+}
+
+model watchlist {
+  chapitreid  Int
+  chapitre    chapitres @relation(fields: [chapitreid], references: [id])
+  userid    Int
+  user      user @relation(fields: [userid], references: [id])
+  @@unique([chapitreid, userid])
+}
+
+model usersubcat {
+  userid    Int
+  user      user @relation(fields: [userid], references: [id])
+  subcatid  Int
+  subcatrgory    subcategories @relation(fields: [subcatid], references: [id])
+  @@unique([userid,subcatid])
+}
+
+model levels {
+  id        Int     @id @default(autoincrement())
+  level     String
+  userId    Int
+  user      user @relation(fields: [userId], references: [id])
+}
+model payemnt {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  user      user @relation(fields: [userId], references: [id])
+  amount    Float
+  date      DateTime
+}
