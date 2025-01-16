@@ -50,6 +50,7 @@ model course {
 model chapitres{
   id        Int    @id @default(autoincrement())
   title      String
+  description String
   courseid Int
   course   course @relation(fields: [courseid], references: [id])
   watchlist watchlist[]

@@ -6,10 +6,7 @@ const addCourse = async (req, res) => {
     await prisma.course.create({
       data: {
         name,
-        duration,
-        chapiters: {
-          create: Array.isArray(chapiter) ? chapiter : [chapiter],
-        },
+        duration
       },
     });
     res.status(200).send({ message: "success" });
