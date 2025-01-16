@@ -6,7 +6,7 @@ const { authenticate } = require("../utils/Authentication");
 
 router.post("/signup", signup)
 router.post("/login", login)
-router.get("/logout",authenticate, logout)
+router.get("/logout", logout)
 
 
 module.exports = router;
