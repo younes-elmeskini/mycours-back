@@ -8,30 +8,17 @@ const generateToken = (user) => {
 
 const authenticate = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const token = req.headers['x-access-token'] || req.cookies.token;
     if (!token) {
       return res.status(401).json({ message: 'Vous n\'êtes pas connecté' });
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = await prisma.user.findUnique({ where: { id: decoded.id } });
+    req.token = token;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Vous n\'êtes pas connecté' });
+    res.status(401).json({ message: 'Token invalide' });
   }
-};
-
-const verifyToken = (req, res, next) => {
-  const token = req.headers['x-access-token'] || req.headers['authorization'];
-  if (!token) {
-    return res.status(401).json({ message: 'Accès refusé' });
-  }
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: 'Token invalide' });
-    }
-    req.user = decoded;
-    next();
-  });
 };
 
 module.exports = { generateToken, verifyToken,authenticate };

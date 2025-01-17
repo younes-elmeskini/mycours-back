@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {generateToken,authenticate} = require("../utils/Authentication")
 
-
 const adduser = async (req,res) => {
     try {
         const {email,password,role} = req.body;
