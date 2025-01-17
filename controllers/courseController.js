@@ -1,19 +1,22 @@
 const prisma = require("../utils/client");
 
 const addCourse = async (req, res) => {
-  const { name, duration, chapiter} = req.body;
   try {
-    await prisma.course.create({
+    const { title, description, price, image } = req.body;
+    const course = await prisma.course.create({
       data: {
-        name,
-        duration
-      },
-    });
-    res.status(200).send({ message: "success" });
+        title,
+        description,
+        price,
+        image,
+        },
+        });
+        res.status(201).json({ message: "Course added successfully", data: course });
   } catch (error) {
-    res.status(500).send({ message: "Opps!!", error });
+    res.status(500).send({ message: "Failed to add course", error: error.message });
   }
-};
+  
+}
 
 const getCourses = async (req, res) => {
   try {

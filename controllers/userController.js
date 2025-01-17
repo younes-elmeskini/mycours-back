@@ -29,7 +29,6 @@ const signup = async (req, res) => {
             data: {
                 email,
                 password: hashedPassword,
-                role
             }
         });
         res.status(201).json({ message: 'User created successfully', user });

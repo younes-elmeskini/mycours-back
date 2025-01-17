@@ -33,7 +33,7 @@ model course {
   description String
   image     String
   price     Float
-  oldprice  Float
+  oldprice  Float?
   userId Int
   user   user @relation(fields: [userId], references: [id])
   subcategoryid Int
