@@ -6,8 +6,8 @@ const { authenticate } = require("../utils/Authentication");
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.get("/profil", authenticate, getProfil)
-router.get("/logout", authenticate, logout);
+router.get("/profil", getProfil)
+router.get("/logout",  logout);
 
 
 module.exports = router;

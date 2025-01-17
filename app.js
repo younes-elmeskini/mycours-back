@@ -22,6 +22,10 @@ app.disable("x-powered-by");
 const helmet = require("helmet");
 app.use(helmet());
 
+//
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 const rateLimit = require("express-rate-limit");
 
 const limiter = rateLimit({
