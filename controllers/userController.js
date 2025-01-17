@@ -58,6 +58,28 @@ const login = async (req, res) => {
     }
   };
 
+const getProfil = async (req, res) => {
+    try {
+    const user = req.user;
+    if (!user) {
+        return res.status(401).json({ message: 'Vous n\'êtes pas connecté' });
+    }
+    const profil = await prisma.user.findUnique({
+        where: { id: user.id },
+        include: {
+        profil: true,
+        },
+    });
+    if (!profil) {
+        return res.status(404).json({ message: 'Profil non trouvé' });
+    }
+    res.json(profil);
+    } catch (error) {
+    console.error('Error getting profil:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+    }
+};
+
 const logout = async (req, res) => {
     try {
       if (!req.user) {
@@ -73,5 +95,6 @@ const logout = async (req, res) => {
 module.exports = {
     signup,
     login,
+    getProfil,
     logout
 }
