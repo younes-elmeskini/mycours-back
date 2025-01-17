@@ -23,7 +23,7 @@ const adduser = async (req,res) => {
 
 const signup = async (req, res) => {
     try {
-        const {email, password, role } = req.body;
+        const {email, password} = req.body;
         const hashedPassword = await bcrypt.hash(password, 8);
         const user = await prisma.user.create({
             data: {
