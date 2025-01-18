@@ -39,10 +39,12 @@ const signup = async (req, res) => {
 // Fonction d'authentification
 const login = async (req, res) => {
     try {
+      
       const { email, password } = req.body;
-  
+      
       const user = await prisma.user.findUnique({ where: { email } });
-  
+      
+
       if (!user) {
         return res.status(401).send('Utilisateur non trouvé');
       }
@@ -63,6 +65,7 @@ const login = async (req, res) => {
       res.status(500).json({ message: 'Erreur interne du serveur', error: error.message });
     }
   };
+
 // const login = async (req, res) => {
 //     try {
 //       if (req.user) {
@@ -87,9 +90,7 @@ const login = async (req, res) => {
 
 const getProfil = async (req, res) => {
     try {
-      if (!req.user) {
-        return res.status(401).json({ message: 'Vous n\'êtes pas connecté' });
-      }
+
       const profil = await prisma.user.findUnique({
         where: {
           id: req.user.userId,
@@ -116,5 +117,5 @@ module.exports = {
     signup,
     login,
     getProfil,
-    logout
+    logout,
 }

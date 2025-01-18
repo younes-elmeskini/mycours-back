@@ -22,11 +22,19 @@ const validation ={
         check('password').not().isEmpty().withMessage('Password is required')
         .isLength({ min: 8 }).withMessage("Password must be at least 8 characters"),
     ],
-
-    
 }
+
+
+const checkLogin = (req, res, next) => {
+    const token = req.cookies.token;
+    if (token) {
+      return res.status(401).json({ message: 'Vous êtes déjà connecté' });
+    }
+    next();
+  };
 
 module.exports = {
     validation,
-    validationandHandlerrors
+    validationandHandlerrors,
+    checkLogin
 };
