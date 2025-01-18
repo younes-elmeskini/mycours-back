@@ -5,7 +5,7 @@ const { isAuthenticated } = require("../utils/Authentication");
 const { validation, validationandHandlerrors} = require("../utils/Validation")
 
 
-router.post("/signup", signup);
+router.post("/signup",validation.validateEmail,validation.validatePassword,validationandHandlerrors, signup);
 router.post("/login",validation.validateEmail,validation.validatePassword,validationandHandlerrors, login);
 router.get("/profil",isAuthenticated, getProfil)
 router.get("/logout", isAuthenticated,  logout);
