@@ -20,6 +20,15 @@ const adduser = async (req,res) => {
     }
 }
 
+const getusers = async (req,res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+}
+
 const signup = async (req, res) => {
     try {
         const {email, password} = req.body;
@@ -36,7 +45,7 @@ const signup = async (req, res) => {
     }
 }
 
-// Fonction d'authentification
+
 const login = async (req, res) => {
     try {
       
@@ -65,28 +74,6 @@ const login = async (req, res) => {
       res.status(500).json({ message: 'Erreur interne du serveur', error: error.message });
     }
   };
-
-// const login = async (req, res) => {
-//     try {
-//       if (req.user) {
-//         return res.status(401).json({ message: "Vous êtes déjà connecté" });
-//       }
-//       const { email, password } = req.body;
-//       const user = await prisma.user.findUnique({ where: { email } });
-//       if (!user) {
-//         return res.status(401).json({ message: "Invalid email" });
-//       }
-//       const isValidPassword = await bcrypt.compare(password, user.password);
-//       if (!isValidPassword) {
-//         return res.status(401).json({ message: "Invalid password" });
-//       }
-//       const token = generateToken(user);
-//       res.cookie("token", token, { httpOnly: true });
-//       res.status(200).json({ message: "User   logged in successfully", user, token });
-//     } catch (error) {
-//       res.status(500).json({ message: "Error logging in user", error: error.message });
-//     }
-//   };
 
 const getProfil = async (req, res) => {
     try {
@@ -117,5 +104,7 @@ module.exports = {
     signup,
     login,
     getProfil,
+    adduser,
+    getusers,
     logout,
 }
