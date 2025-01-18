@@ -7,8 +7,8 @@ const { validation, validationandHandlerrors} = require("../utils/Validation")
 
 router.post("/signup",validation.validateEmail,validation.validatePassword,validationandHandlerrors, signup);
 router.post("/login",validation.validateEmail,validation.validatePassword,validationandHandlerrors, login);
-router.get("/profil",isAuthenticated, getProfil)
-router.get("/logout", isAuthenticated,  logout);
+router.get("/profil",isAuthenticated ,validationandHandlerrors, getProfil)
+router.get("/logout", isAuthenticated ,validationandHandlerrors,  logout);
 
 
 module.exports = router;
