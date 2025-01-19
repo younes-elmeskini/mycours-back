@@ -32,7 +32,20 @@ const getusers = async (req, res) => {
     res.status(500).json({ message: 'Error fetching users' });
   }
 };
-
+const getDeletedUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        deleted: {
+          not: null,
+        },
+      },
+    });
+    res.status(200).json({ users });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+};
 
 const getuserById = async (req,res) =>{
   try {
@@ -160,5 +173,6 @@ module.exports = {
     getuserById,
     logout,
     updateUser,
-    deleteUser
+    deleteUser,
+    getDeletedUsers
 }
