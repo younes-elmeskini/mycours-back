@@ -20,14 +20,19 @@ const adduser = async (req,res) => {
     }
 };
 
-const getusers = async (req,res) => {
+const getusers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany();
-    res.status(200).json({ users });
+    const users = await prisma.user.findMany({
+      where: {
+        deleted: null,
+      },
+    });
+    res.status(200).json({ users: users });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users' });
   }
 };
+
 
 const getuserById = async (req,res) =>{
   try {
@@ -55,6 +60,23 @@ const updateUser = async (req, res) => {
     res.status(200).json({ message: 'User updated successfully', user: updatedUser });
   } catch (err) {
     res.status(500).json({ message: 'Erreur serveur',error:err.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        deleted: new Date(),
+      },
+    });
+    res.json({ message: 'Utilisateur supprimé avec succès' });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur', error:err.message });
   }
 };
 
@@ -137,5 +159,6 @@ module.exports = {
     getusers,
     getuserById,
     logout,
-    updateUser
+    updateUser,
+    deleteUser
 }

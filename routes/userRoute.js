@@ -1,5 +1,5 @@
 const express = require("express");
-const { signup, login, logout,getProfil,adduser,getusers,getuserById,updateUser} = require("../controllers/userController");
+const { signup, login, logout,getProfil,adduser,getusers,getuserById,updateUser, deleteUser} = require("../controllers/userController");
 const router = express.Router();
 const { isAuthenticated } = require("../utils/Authentication");
 const { validation, validationandHandlerrors, checkLogin} = require("../utils/Validation")
@@ -14,5 +14,6 @@ router.post("/adduser", isAuthenticated, checkRole("admin"), validation.validate
 router.get("/", isAuthenticated, checkRole("admin"),getusers)
 router.get("/id", isAuthenticated, checkRole("admin"),getuserById)
 router.patch("/:id", isAuthenticated, checkRole("admin"),updateUser)
+router.delete("/:id",isAuthenticated, checkRole("admin"),deleteUser)
 
 module.exports = router;
