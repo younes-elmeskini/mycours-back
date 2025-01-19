@@ -18,7 +18,7 @@ const adduser = async (req,res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error creating user' });
     }
-}
+};
 
 const getusers = async (req,res) => {
   try {
@@ -27,7 +27,7 @@ const getusers = async (req,res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users' });
   }
-}
+};
 
 const getuserById = async (req,res) =>{
   try {
@@ -40,7 +40,23 @@ const getuserById = async (req,res) =>{
   } catch (error) {
     res.status(500).json({ message: 'Error fetching user' });
   }
-}
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    const updates = req.body;
+    await prisma.user.update({ where: { id }, data: updates });
+    const updatedUser = await prisma.user.findUnique({ where: { id } });
+    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur',error:err.message });
+  }
+};
 
 const signup = async (req, res) => {
     try {
@@ -56,7 +72,7 @@ const signup = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error creating user', error: error.message });
     }
-}
+};
 
 
 const login = async (req, res) => {
@@ -86,7 +102,7 @@ const login = async (req, res) => {
       console.error(error);
       res.status(500).json({ message: 'Erreur interne du serveur', error: error.message });
     }
-  };
+};
 
 const getProfil = async (req, res) => {
     try {
@@ -104,13 +120,13 @@ const getProfil = async (req, res) => {
       console.error('Error getting profil:', error);
       res.status(500).json({ message: 'Erreur serveur' });
     }
-  };
+};
 
 
 const logout = async (req, res) => {
     res.clearCookie('token', { secure: true, httpOnly: true });
     res.send({ message: 'Déconnexion réussie' });
-  };
+};
 
 
 module.exports = {
@@ -121,4 +137,5 @@ module.exports = {
     getusers,
     getuserById,
     logout,
+    updateUser
 }
