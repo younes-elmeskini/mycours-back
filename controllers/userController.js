@@ -112,12 +112,8 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-      
       const { email, password } = req.body;
-      
       const user = await prisma.user.findUnique({ where: { email } });
-      
-
       if (!user) {
         return res.status(401).send('Utilisateur non trouvé');
       }
@@ -129,11 +125,9 @@ const login = async (req, res) => {
       }
 
       const token = generateToken(user);
-
       res.cookie('token', token, { secure: true, httpOnly: true });
       res.status(200).json({ message: 'Bienvenue, ' , user, token });
     } catch (error) {
-
       console.error(error);
       res.status(500).json({ message: 'Erreur interne du serveur', error: error.message });
     }
