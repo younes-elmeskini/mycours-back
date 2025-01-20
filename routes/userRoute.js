@@ -17,7 +17,6 @@ router.get("/deletedusers",isAuthenticated, checkRole("admin"),getDeletedUsers)
 router.get("/id", isAuthenticated, checkRole("admin"),getuserById)
 router.patch("/:id", isAuthenticated, checkRole("admin"),updateUser)
 router.delete("/:id",isAuthenticated, checkRole("admin"),deleteUser)
-
 router.get("/profil",isAuthenticated ,validationandHandlerrors, getProfil)
 
 
