@@ -17,17 +17,36 @@ const addCategory = async (req, res) => {
 
 const getCategories = async (req, res) => {
     try {
-      const categories = await prisma.category.findMany();
-      res.status(200).json({ categories });
+    const categories = await prisma.category.findMany();
+    res.status(200).json({ categories });
     } catch (error) {
-      res.status(500).json({ message: 'Error fetching categories' });
+    res.status(500).json({ message: 'Error fetching categories' });
     }
-  };
+};
+
+const getCategoryById = async (req, res) => {
+    try {
+    const id = parseInt(req.params.id);
+    const category = await prisma.category.findUnique({
+        where: {
+        id: id,
+        },
+    });
+    if (!category) {
+        return res.status(404).json({ message: 'Category not found' });
+    }
+    res.status(200).json({ category });
+    } catch (error) {
+    res.status(500).json({ message: 'Error fetching category' });
+    }
+};
+
 
 
 
 
 module.exports = {
     addCategory,
-    getCategories
+    getCategories,
+    getCategoryById
 }

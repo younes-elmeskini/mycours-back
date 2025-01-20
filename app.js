@@ -39,6 +39,8 @@ app.use(limiter);
 
 app.use("/course", require("./routes/courseRoute"));
 
+app.use("/category",require("./routes/categoryRoute"))
+
 app.use("/user", require("./routes/userRoute"));
 
 //Listening om the port
