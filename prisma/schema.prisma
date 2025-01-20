@@ -71,7 +71,7 @@ model Categories {
   id        Int    @id @default(autoincrement())
   name      String
   description String
-  image     String
+  image     String?
   subcategory subcategories[]
 }
 
@@ -79,7 +79,7 @@ model subcategories {
   id        Int    @id @default(autoincrement())
   name      String
   description String
-  image     String
+  image     String?
   categoryid  Int
   category  Categories @relation(fields: [categoryid], references: [id])
   course  course[]
