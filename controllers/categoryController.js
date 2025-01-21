@@ -61,6 +61,8 @@ const updateCategory = async (req, res) => {
 const deleteCategory = async (req, res) => {
   try {
       const id = parseInt(req.params.id);
+
+      // Check if the category exists
       const category = await prisma.categories.findUnique({
           where: { id: id },
       });
@@ -69,6 +71,16 @@ const deleteCategory = async (req, res) => {
           return res.status(404).json({ message: 'Category not found' });
       }
 
+      // Check if the category has any subcategories
+      const subcategories = await prisma.subcategories.findMany({
+          where: { categoryId: id },
+      });
+
+      if (subcategories.length > 0) {
+          return res.status(400).json({ message: 'Cannot delete category: it contains subcategories' });
+      }
+
+      // If the category has no subcategories, delete it
       await prisma.categories.delete({
           where: { id: id },
       });
