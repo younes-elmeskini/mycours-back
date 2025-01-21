@@ -1,9 +1,9 @@
-const prisma = require('@prisma/client')
+const prisma = require("../utils/client");
 
 const addCategory = async (req, res) => {
     try {
       const { name, description } = req.body;
-      const category = await prisma.category.create({
+      const category = await prisma.categories.create({
         data: {
           name,
           description,
@@ -17,7 +17,7 @@ const addCategory = async (req, res) => {
 
 const getCategories = async (req, res) => {
     try {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.categories.findMany();
     res.status(200).json({ categories });
     } catch (error) {
     res.status(500).json({ message: 'Error fetching categories' });
@@ -27,7 +27,7 @@ const getCategories = async (req, res) => {
 const getCategoryById = async (req, res) => {
     try {
     const id = parseInt(req.params.id);
-    const category = await prisma.category.findUnique({
+    const category = await prisma.categories.findUnique({
         where: {
         id: id,
         },
@@ -41,6 +41,23 @@ const getCategoryById = async (req, res) => {
     }
 };
 
+const updateCategory = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const category = await prisma.categories.findUnique({ where: { id } });
+    if (!category) {
+      return res.status(404).json({ message: 'category non trouvé' });
+    }
+    const updates = req.body;
+    await prisma.categories.update({ where: { id }, data: updates });
+    const updatedCategory = await prisma.user.findUnique({ where: { id } });
+    res.status(200).json({ message: 'Category updated successfully', category: updatedCategory });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur',error:err.message });
+  }
+};
+
+
 
 
 
@@ -48,5 +65,6 @@ const getCategoryById = async (req, res) => {
 module.exports = {
     addCategory,
     getCategories,
-    getCategoryById
+    getCategoryById,
+    updateCategory
 }
