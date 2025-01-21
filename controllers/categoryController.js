@@ -58,6 +58,28 @@ const updateCategory = async (req, res) => {
 };
 
 
+const deleteCategory = async (req, res) => {
+  try {
+      const id = parseInt(req.params.id);
+      const category = await prisma.categories.findUnique({
+          where: { id: id },
+      });
+
+      if (!category) {
+          return res.status(404).json({ message: 'Category not found' });
+      }
+
+      await prisma.categories.delete({
+          where: { id: id },
+      });
+
+      res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+      res.status(500).json({ message: 'Error deleting category', error: error.message });
+  }
+};
+
+
 
 
 
@@ -66,5 +88,6 @@ module.exports = {
     addCategory,
     getCategories,
     getCategoryById,
-    updateCategory
+    updateCategory,
+    deleteCategory
 }
