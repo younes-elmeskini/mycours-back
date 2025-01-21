@@ -91,7 +91,34 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+const addSubcategory = async (req, res) => {
+  try {
+      const categoryId = parseInt(req.params.id); // ID de la catégorie parente
+      const { name, description } = req.body;
 
+      // Vérifier si la catégorie parente existe
+      const category = await prisma.categories.findUnique({
+          where: { id: categoryId },
+      });
+
+      if (!category) {
+          return res.status(404).json({ message: 'Category not found' });
+      }
+
+      // Créer la sous-catégorie
+      const subcategory = await prisma.subcategories.create({
+          data: {
+              name,
+              description,
+              categoryId: categoryId,
+          },
+      });
+
+      res.status(201).json({ message: 'Subcategory added successfully', data: subcategory });
+  } catch (error) {
+      res.status(500).json({ message: 'Error adding subcategory', error: error.message });
+  }
+};
 
 
 
@@ -101,5 +128,6 @@ module.exports = {
     getCategories,
     getCategoryById,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    addSubcategory
 }
