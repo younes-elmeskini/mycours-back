@@ -37,9 +37,9 @@ app.use(limiter);
 
 // routes
 
-app.use("/course", require("./routes/courseRoute"));
+// app.use("/course", require("./routes/courseRoute"));
 
-app.use("/category",require("./routes/categoryRoute"))
+app.use("/category", require("./routes/categoryRoute"));
 
 app.use("/user", require("./routes/userRoute"));
 

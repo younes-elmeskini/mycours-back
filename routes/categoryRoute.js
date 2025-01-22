@@ -12,3 +12,6 @@ router.patch("/:id",checkRole("admin"),updateCategory)
 router.delete("/:id",checkRole("admin"),deleteCategory)
 router.post("/:id/subcategory", checkRole("admin"), addSubcategory);
 router.get("/:id/subcategories", checkRole("admin"), getSubcategories); 
+
+
+module.exports = router;

@@ -32,7 +32,7 @@ const prisma = require("../utils/client");
 //   }
 // };
 
-module.exports = {addCategory };
+// module.exports = {addCategory };
 
 // {
 //   "name": "Advanced MongoDB",
