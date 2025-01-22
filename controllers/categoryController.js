@@ -2,11 +2,12 @@ const prisma = require("../utils/client");
 
 const addCategory = async (req, res) => {
     try {
-      const { name, description } = req.body;
+      const { name, description ,image} = req.body;
       const category = await prisma.categories.create({
         data: {
           name,
           description,
+          image
         },
       });
       res.status(201).json({ message: 'Category added successfully', data: category });
@@ -50,7 +51,7 @@ const updateCategory = async (req, res) => {
     }
     const updates = req.body;
     await prisma.categories.update({ where: { id }, data: updates });
-    const updatedCategory = await prisma.user.findUnique({ where: { id } });
+    const updatedCategory = await prisma.categories.findUnique({ where: { id } });
     res.status(200).json({ message: 'Category updated successfully', category: updatedCategory });
   } catch (err) {
     res.status(500).json({ message: 'Erreur serveur',error:err.message });

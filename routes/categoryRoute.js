@@ -5,13 +5,12 @@ const { isAuthenticated } = require("../utils/Authentication");
 const { validation, validationandHandlerrors, checkLogin} = require("../utils/Validation")
 const {checkRole} = require("../utils/Autorization")
 
-router.post("/add",checkRole("admin"),addCategory)
-router.get("/",checkRole("admin"),getCategories)
-router.get("/:id",checkRole("admin"),getCategoryById)
-router.patch("/:id",checkRole("admin"),updateCategory)
-router.delete("/:id",checkRole("admin"),deleteCategory)
-router.post("/:id/subcategory", checkRole("admin"), addSubcategory);
-router.get("/:id/subcategories", checkRole("admin"), getSubcategories); 
-
+router.post("/add",isAuthenticated,checkRole("admin"),addCategory)
+router.get("/",isAuthenticated,checkRole("admin"),getCategories)
+router.get("/:id",isAuthenticated,checkRole("admin"),getCategoryById)
+router.patch("/:id",isAuthenticated,checkRole("admin"),updateCategory)
+router.delete("/:id",isAuthenticated,checkRole("admin"),deleteCategory)
+router.post("/:id/subcategory",isAuthenticated, checkRole("admin"), addSubcategory);
+router.get("/:id/subcategories",isAuthenticated, checkRole("admin"), getSubcategories); 
 
 module.exports = router;
