@@ -37,6 +37,8 @@ app.use(limiter);
 
 // routes
 
+//testt
+
 // app.use("/course", require("./routes/courseRoute"));
 
 app.use("/category", require("./routes/categoryRoute"));
