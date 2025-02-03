@@ -95,7 +95,7 @@ const deleteUser = async (req, res) => {
 
 const signup = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const {email, password,role} = req.body;
         const hashedPassword = await bcrypt.hash(password, 8);
         const user = await prisma.user.create({
             data: {
@@ -151,6 +151,30 @@ const getProfil = async (req, res) => {
     }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await prisma.user.findUnique({ 
+      where: { id: req.user.userId }
+      });
+    if (!user) {
+      return res.status(404).json({ message: 'Profil non trouvé' });
+      }
+    const isValidPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Mot de passe actuel incorrect' });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { id: req.user.userId },
+      data: { password: hashedPassword },
+      });
+    res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur',error: error.message });
+  }
+  };
+
 
 const logout = async (req, res) => {
     res.clearCookie('token', { secure: true, httpOnly: true });
@@ -162,6 +186,7 @@ module.exports = {
     signup,
     login,
     getProfil,
+    changePassword,
     adduser,
     getusers,
     getuserById,
