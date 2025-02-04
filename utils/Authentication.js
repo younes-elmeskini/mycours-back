@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const secretKey = process.env.SECRET_KEY;
 const refreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 const prisma = require('../utils/client');
@@ -6,6 +7,38 @@ const prisma = require('../utils/client');
 const generateToken = (user) => {
   const token = jwt.sign({ userId: user.id, role: user.role }, secretKey, { expiresIn: '1h' });
   return token;
+};
+
+
+// Function to send email with reset token
+const sendMail = async (email, token) => {
+  // Create a transporter using environment variables for security
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER, // Use environment variable for email
+      pass: process.env.EMAIL_PASS, // Use environment variable for password
+    },
+  });
+
+  // Email options
+  const mailOptions = {
+    from: process.env.EMAIL_USER,  // Same as the auth user
+    to: email,
+    subject: 'Reset Password',
+    text: `Your reset password token is: ${token}`,
+  };
+
+  try {
+    // Send the email and wait for it to complete
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent: ' + info.response);
+  } catch (error) {
+    console.error('Error sending email: ', error);
+    throw new Error('Error sending email');
+  }
 };
 
 const generateRefreshToken = (user) => {
@@ -75,6 +108,7 @@ module.exports ={
   generateToken,
   verifyToken,
   isAuthenticated,
+  sendMail,
   generateRefreshToken,
   verifyRefreshToken,
   refreshTokens

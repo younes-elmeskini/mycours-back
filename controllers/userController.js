@@ -1,7 +1,7 @@
 const prisma = require("../utils/client");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {generateToken,authenticate} = require("../utils/Authentication")
+const {generateToken,sendMail} = require("../utils/Authentication")
 
 const adduser = async (req,res) => {
     try {
@@ -174,6 +174,24 @@ const changePassword = async (req, res) => {
     res.status(500).json({ message: 'Erreur serveur',error: error.message });
   }
   };
+  
+const RestPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { email: email },
+    });
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    const token = await generateToken(user.id);
+    await sendMail(user.email, token);
+    res.status(200).json({ message: 'Un email de réinitialisation de mot d \'accès a été envoyé' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur', error: error.message });
+  }
+};
+
 
 
 const logout = async (req, res) => {
@@ -187,6 +205,7 @@ module.exports = {
     login,
     getProfil,
     changePassword,
+    RestPassword,
     adduser,
     getusers,
     getuserById,
