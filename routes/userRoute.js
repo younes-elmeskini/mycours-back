@@ -15,8 +15,8 @@ router.get("/logout",validationandHandlerrors,  logout);
 // users manager
 router.post("/adduser", isAuthenticated, checkRole("admin"), validation.validateEmail, validation.validatePassword, validationandHandlerrors, adduser)
 router.get("/", isAuthenticated, checkRole("admin"),getusers)
-router.get("/deletedusers",isAuthenticated, checkRole("admin"),getDeletedUsers)
-router.get("/id", isAuthenticated, checkRole("admin"),getuserById)
+router.get("/deleted",isAuthenticated, checkRole("admin"),getDeletedUsers)
+router.get("/:id", isAuthenticated, checkRole("admin"),getuserById)
 router.get("/profil",isAuthenticated ,validationandHandlerrors, getProfil)
 router.put("/edit-Password", isAuthenticated,changePassword)
 router.patch("/:id", isAuthenticated, checkRole("admin"),updateUser)

@@ -50,13 +50,18 @@ const getDeletedUsers = async (req, res) => {
 const getuserById = async (req,res) =>{
   try {
     const {id}= req.body
-    const user = await prisma.user.findUnique({where: {id}});
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+        },
+      });
     if(!user){
       return res.status(404).json({ message: 'User not found' });
     }
     res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user' });
+    console.error(error)
+    res.status(500).json({ message: 'Error fetching user',error: error.message });
   }
 };
 
