@@ -33,16 +33,16 @@ const getAllcoures = async (req, res) => {
 
 const getCourseById = async (req, res) => {
     try {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
         const course = await prisma.course.findUnique({
             where: {
                 id: id,
-                }
-            });
-        if(!course){
+            },
+        });
+        if (!course) {
             return res.status(404).json({ message: "Course not found" });
         }
-        res.status(200).json({ message: "Course retrieved successfully", course });        
+        res.status(200).json({ message: "Course retrieved successfully", course });
     } catch (error) {
         res.status(500).json({ message: "Failed to retrieve course", error });
     }

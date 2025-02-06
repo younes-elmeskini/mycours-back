@@ -32,6 +32,7 @@ const getusers = async (req, res) => {
     res.status(500).json({ message: 'Error fetching users' });
   }
 };
+
 const getDeletedUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany({
@@ -49,12 +50,12 @@ const getDeletedUsers = async (req, res) => {
 
 const getuserById = async (req,res) =>{
   try {
-    const {id}= req.body
+    const id = parseInt(req.params.id)
     const user = await prisma.user.findUnique({
       where: {
-        id,
-        },
-      });
+        id
+      },
+    });
     if(!user){
       return res.status(404).json({ message: 'User not found' });
     }
