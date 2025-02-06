@@ -16,7 +16,7 @@ const sendMail = async (email, token) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER, // Use environment variable for email
       pass: process.env.EMAIL_PASS, // Use environment variable for password
